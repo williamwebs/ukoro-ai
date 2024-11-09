@@ -1,9 +1,12 @@
 "use client";
 
+import { userAtom } from "@/atom/userAtom";
+import { SigninSignupForm } from "@/components/signin-signup-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { useAtom } from "jotai";
 import { useState } from "react";
 
 type VerificationStatus = "idle" | "verifying" | "success" | "failure";
@@ -86,10 +89,7 @@ const XRayPage = () => {
 
       const result = await model.generateContent([prompt, ...imageParts]);
       const response = await result.response;
-      console.log(response);
-
       const text = response.text();
-      console.log(text);
 
       try {
         const parsedResult = JSON.parse(text);
@@ -101,7 +101,6 @@ const XRayPage = () => {
         ) {
           setVerificationResult(parsedResult);
           setVerificationStatus("success");
-          console.log(parsedResult);
 
           setIsSubmitting(false);
         } else {
@@ -120,6 +119,16 @@ const XRayPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  const [user] = useAtom(userAtom);
+
+  if (!user || user === null) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <SigninSignupForm />
+      </div>
+    );
+  }
   return (
     <div className="w-full h-full flex flex-col md:flex-row items-start gap-5 px-2">
       <div className="w-full md:h-full h-fit md:w-1/3 rounded">

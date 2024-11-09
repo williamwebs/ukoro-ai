@@ -1,9 +1,12 @@
 "use client";
 
+import { userAtom } from "@/atom/userAtom";
+import { SigninSignupForm } from "@/components/signin-signup-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 
 type VerificationStatus = "idle" | "verifying" | "success" | "failure";
@@ -25,7 +28,6 @@ const VideoTranscriber = () => {
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [verificationStatus, setVerificationStatus] =
     useState<VerificationStatus>("idle");
   const [verificationResult, setVerificationResult] = useState<Result | null>(
@@ -46,7 +48,6 @@ const VideoTranscriber = () => {
 
       const reader = new FileReader();
       reader.onload = (e) => {
-        console.log(e.target);
         setVideoPreview(e.target?.result as string);
       };
       reader.readAsDataURL(selectedFile);
@@ -102,7 +103,6 @@ const VideoTranscriber = () => {
       const result = await model.generateContent([prompt, ...videoParts]);
       const response = await result.response;
       const text = response.text();
-      console.log(text);
 
       try {
         const cleanedResult = text
@@ -123,7 +123,6 @@ const VideoTranscriber = () => {
         ) {
           setVerificationResult(parsedResult);
           setVerificationStatus("success");
-          console.log(parsedResult);
 
           setIsSummarizing(false);
         } else {
@@ -168,7 +167,6 @@ const VideoTranscriber = () => {
         setQueryResult((prev) =>
           prev ? [...prev, newQueryResult] : [newQueryResult]
         );
-        console.log(text);
         setIsUploading(false);
         setQuestion("");
       } catch (error) {
@@ -183,6 +181,16 @@ const VideoTranscriber = () => {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [queryResult]);
+
+  const [user] = useAtom(userAtom);
+
+  if (!user || user === null) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <SigninSignupForm />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col md:flex-row items-start gap-5 px-2">
@@ -261,8 +269,11 @@ const VideoTranscriber = () => {
                 {/* answers */}
                 {queryResult && (
                   <div>
-                    {queryResult.map((q) => (
-                      <div className="border-b w-full px-4 py-2 rounded">
+                    {queryResult.map((q, index) => (
+                      <div
+                        key={index}
+                        className="border-b w-full px-4 py-2 rounded"
+                      >
                         <div className="mt-1 text-sm">
                           <span className="font-semibold text-base">Q:</span>{" "}
                           {q.question}

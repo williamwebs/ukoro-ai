@@ -8,7 +8,6 @@ import {
   ModalFooter,
   ModalTrigger,
 } from "./ui/animated-modal";
-import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { ReactNode } from "react";
 

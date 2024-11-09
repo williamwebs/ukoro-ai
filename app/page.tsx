@@ -1,7 +1,15 @@
+"use client";
+
+import { userAtom } from "@/atom/userAtom";
 import { AnimatedModal } from "@/components/modal";
 import { SigninSignupForm } from "@/components/signin-signup-form";
+import { Button } from "@/components/ui/button";
+import { useAtom } from "jotai";
+import Link from "next/link";
 
 export default function Home() {
+  const [user] = useAtom(userAtom);
+
   return (
     <main className="w-full min-h-full flex items-center justify-center">
       <div className="flex flex-col gap-6">
@@ -19,11 +27,36 @@ export default function Home() {
           and see your history in one streamlined, smart space.
         </p>
 
-        <AnimatedModal
-          triggerText="Get started"
-          animatedText="wa na"
-          modalContent={<SigninSignupForm />}
-        />
+        {user ? (
+          <AnimatedModal
+            triggerText="Explore"
+            animatedText="zooom.."
+            modalContent={
+              <>
+                <h4 className="text-center text-base font-semibold mb-4">
+                  Click on any of the links to explore
+                </h4>
+                <div className="flex flex-col items-center justify-between gap-3 md:gap-2 w-full h-full">
+                  <Button className="w-full" variant={"outline"}>
+                    <Link href={"/xray-scanner"}>X-Ray Scanner</Link>
+                  </Button>
+                  <Button className="w-full" variant={"outline"}>
+                    <Link href={"/report-analyzer"}>Medical Report</Link>
+                  </Button>
+                  <Button className="w-full" variant={"outline"}>
+                    <Link href={"/video-transcriber"}>Video Transcriber</Link>
+                  </Button>
+                </div>
+              </>
+            }
+          />
+        ) : (
+          <AnimatedModal
+            triggerText="Get started"
+            animatedText="wa na"
+            modalContent={<SigninSignupForm />}
+          />
+        )}
       </div>
     </main>
   );
