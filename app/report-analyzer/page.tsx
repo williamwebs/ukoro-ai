@@ -1,6 +1,6 @@
 "use client";
 
-import { userAtom } from "@/atom/userAtom";
+import { userAtom } from "../../atom/userAtom";
 import { SigninSignupForm } from "../../components/signin-signup-form";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
