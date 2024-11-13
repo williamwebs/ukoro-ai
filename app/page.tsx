@@ -1,9 +1,9 @@
 "use client";
 
-import { userAtom } from "@/atom/userAtom";
-import { AnimatedModal } from "@/components/modal";
-import { SigninSignupForm } from "@/components/signin-signup-form";
-import { Button } from "@/components/ui/button";
+import { userAtom } from "../atom/userAtom";
+import { AnimatedModal } from "../components/modal";
+import { SigninSignupForm } from "../components/signin-signup-form";
+import { Button } from "../components/ui/button";
 import { useAtom } from "jotai";
 import Link from "next/link";
 
