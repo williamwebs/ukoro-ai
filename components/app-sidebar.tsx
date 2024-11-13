@@ -1,6 +1,6 @@
 "use client";
 
-import { userAtom } from "@/atom/userAtom";
+import { userAtom } from "../atom/userAtom";
 import {
   Sidebar,
   SidebarContent,
@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-} from "@/components/ui/sidebar";
+} from "../components/ui/sidebar";
 import { useAtom } from "jotai";
 import { Bot, File, Home, Image, User, Video } from "lucide-react";
 import Link from "next/link";
@@ -25,7 +25,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { signOut } from "firebase/auth";
-import { auth } from "@/firebase";
+import { auth } from "../firebase";
 import { useRouter } from "next/navigation";
 
 // Menu items
